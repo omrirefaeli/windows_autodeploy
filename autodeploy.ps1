@@ -52,11 +52,12 @@ catch {
 #################################### Elevated Terminal Shortcut ##############################################
 CreateShortcut -name "Terminal Admin" -Target "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.15.2875.0_x64__8wekyb3d8bbwe\wt.exe" -OutputDirectory "C:\Users\omrirefaeli\Desktop" -Elevated True -HotKey "CTRL+ALT+T"
 
-
-
-
+#################################### Enable WSL ##############################################
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux 
 
 #################################### Help Functions ##############################################
+
+# https://blog.ctglobalservices.com/powershell/hra/create-shortcut-with-elevated-rights/ 
 Function CreateShortcut
 {
     [CmdletBinding()]

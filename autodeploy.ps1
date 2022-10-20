@@ -67,11 +67,11 @@ $notepadPath_86 = "$env:HOMEDRIVE\Program Files (x86)\Notepad++\notepad++.exe"
 $notepad_keys = "CTRL+SHIFT+N"
 if (Test-Path $notepadPath) {
     Write-Host -ForegroundColor Green -BackgroundColor Black "Notepad++ Shortcut: Found executable, creating a shortcut... $notepad_keys"
-    CreateShortcut -name "Notepad++" -Target $notepadPath -OutputDirectory "$env:USERPROFILE\Desktop"  -HotKey $notepad_keys
+    CreateShortcut -name "Notepad++" -Target $notepadPath -OutputDirectory "$env:USERPROFILE\Desktop" -HotKey $notepad_keys
 }
 elseif (Test-Path $notepadPath_86) {
     Write-Host -ForegroundColor Green -BackgroundColor Black "Notepad++ Shortcut: Found executable (x86), creating a shortcut... $notepad_keys"
-    CreateShortcut -name "Notepad++" -Target $notepadPath_86 -OutputDirectory "$env:USERPROFILE\Desktop" -Elevated -HotKey $notepad_keys
+    CreateShortcut -name "Notepad++" -Target $notepadPath_86 -OutputDirectory "$env:USERPROFILE\Desktop" -HotKey $notepad_keys
 }
 else {
     Write-Host -ForegroundColor Red -BackgroundColor Black "Notepad++ Shortcut: Could find Notepad++ executable, and therefore could not create a shortcut for the Terminal"

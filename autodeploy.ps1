@@ -7,19 +7,18 @@ $install_array = @("googlechrome", "7zip.install", "git", "notepadplusplus", "ev
 
 $personal_additions = @("evernote")
 Write-Host -ForegroundColor black -BackgroundColor Cyan "Would you like to include the personal software additions? The packages are:`n$($personal_additions)"
-do
-{
-$personal_bool = Read-Host "Please enter [y/n]"
+do {
+    $personal_bool = Read-Host "Please enter [y/n]"
 }
-while ($personal_bool -notin @("y","n"))
+while ($personal_bool -notin @("y", "n"))
 
-if ($personal_bool -eq "y") {$install_array += $personal_additions} 
+if ($personal_bool -eq "y") { $install_array += $personal_additions } 
 
 $install_string = $install_array -join " "
 Write-Host -ForegroundColor black -BackgroundColor Cyan "Installing the packages: `n$($install_string)"
 
-$install_array | %{
-choco install $_ -y
+$install_array | % {
+    choco install $_ -y
 }
 
 #################################### RC Revert ##############################################
@@ -50,23 +49,48 @@ catch {
 
 
 #################################### Elevated Terminal Shortcut ##############################################
-CreateShortcut -name "Terminal Admin" -Target "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.15.2875.0_x64__8wekyb3d8bbwe\wt.exe" -OutputDirectory "C:\Users\omrirefaeli\Desktop" -Elevated True -HotKey "CTRL+ALT+T"
+$terminal_path = (Get-ChildItem "C:\Program Files\WindowsApps\" -Include "wt.exe" -Recurse).FullName
+if (!$terminal_path) {
+    $terminal_path = (Get-ChildItem "C:\Program Files (x86)\WindowsApps\" -Include "wt.exe" -Recurse).FullName
+}
+if ($terminal_path) {
+    Write-Host -ForegroundColor Green -BackgroundColor Black "Elevated Terminal Shortcut: Found executable, creating a shortcut..."
+    CreateShortcut -name "Terminal Admin" -Target $terminal_path  -OutputDirectory "C:\Users\omrirefaeli\Desktop" -Elevated True -HotKey "CTRL+ALT+T"
+}
+else {
+    Write-Host -ForegroundColor Red -BackgroundColor Black "Elevated Terminal Shortcut: Could find Terminal executable, and therefore could not create a shortcut for the Terminal"
+}
 
+#################################### Notepad++ Shortcut ##############################################
+$notepadPath = "$env:HOMEDRIVE\Program Files\Notepad++\notepad++.exe"
+$notepadPath_86 = "$env:HOMEDRIVE\Program Files (x86)\Notepad++\notepad++.exe"
+$notepad_keys = "CTRL+SHIFT+N"
+if (Test-Path $notepadPath) {
+    Write-Host -ForegroundColor Green -BackgroundColor Black "Notepad++ Shortcut: Found executable, creating a shortcut... $notepad_keys"
+    CreateShortcut -name "Notepad++" -Target $notepadPath -OutputDirectory "$env:USERPROFILE\Desktop"  -HotKey $notepad_keys
+}
+elseif (Test-Path $notepadPath_86) {
+    Write-Host -ForegroundColor Green -BackgroundColor Black "Notepad++ Shortcut: Found executable (x86), creating a shortcut... $notepad_keys"
+    CreateShortcut -name "Notepad++" -Target $notepadPath_86 -OutputDirectory "$env:USERPROFILE\Desktop" -Elevated -HotKey $notepad_keys
+}
+else {
+    Write-Host -ForegroundColor Red -BackgroundColor Black "Notepad++ Shortcut: Could find Notepad++ executable, and therefore could not create a shortcut for the Terminal"
+
+}
 #################################### Enable WSL ##############################################
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux 
 
 #################################### Help Functions ##############################################
 
 # https://blog.ctglobalservices.com/powershell/hra/create-shortcut-with-elevated-rights/ 
-Function CreateShortcut
-{
+Function CreateShortcut {
     [CmdletBinding()]
     param (    
-        [parameter(Mandatory=$true)]
-        [ValidateScript( {[IO.File]::Exists($_)} )]
+        [parameter(Mandatory = $true)]
+        [ValidateScript( { [IO.File]::Exists($_) } )]
         [System.IO.FileInfo] $Target,
     
-        [ValidateScript( {[IO.Directory]::Exists($_)} )]
+        [ValidateScript( { [IO.Directory]::Exists($_) } )]
         [System.IO.DirectoryInfo] $OutputDirectory,
     
         [string] $Name,
@@ -85,13 +109,15 @@ Function CreateShortcut
         #region Create Shortcut
         if ($Name) {
             [System.IO.FileInfo] $LinkFileName = [System.IO.Path]::ChangeExtension($Name, "lnk")
-        } else {
+        }
+        else {
             [System.IO.FileInfo] $LinkFileName = [System.IO.Path]::ChangeExtension($Target.Name, "lnk")
         }
     
         if ($OutputDirectory) {
             [System.IO.FileInfo] $LinkFile = [IO.Path]::Combine($OutputDirectory, $LinkFileName)
-        } else {
+        }
+        else {
             [System.IO.FileInfo] $LinkFile = [IO.Path]::Combine($Target.Directory, $LinkFileName)
         }
 
@@ -118,8 +144,7 @@ Function CreateShortcut
             $writer = new-object System.IO.FileStream $tempFile, ([System.IO.FileMode]::Create)
             $reader = $LinkFile.OpenRead()
         
-            while ($reader.Position -lt $reader.Length)
-            {        
+            while ($reader.Position -lt $reader.Length) {        
                 $byte = $reader.ReadByte()
                 if ($reader.Position -eq 22) {
                     $byte = 34
@@ -135,7 +160,8 @@ Function CreateShortcut
             Rename-Item -Path $tempFile -NewName $LinkFile.Name
         }
         #endregion
-    } catch {
+    }
+    catch {
         Write-Error "Failed to create shortcut. The error was '$_'."
         return $null
     }

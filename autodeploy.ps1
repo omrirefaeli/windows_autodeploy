@@ -157,7 +157,7 @@ else {
 #################################### Notepad++ Shortcut ##############################################
 $notepadPath = "$env:HOMEDRIVE\Program Files\Notepad++\notepad++.exe"
 $notepadPath_86 = "$env:HOMEDRIVE\Program Files (x86)\Notepad++\notepad++.exe"
-$notepad_keys = "CTRL+SHIFT+N"
+$notepad_keys = "CTRL+ALT+P"
 if (Test-Path $notepadPath) {
     Write-Host -ForegroundColor Green -BackgroundColor Black "Notepad++ Shortcut: Found executable, creating a shortcut... $notepad_keys"
     CreateShortcut -name "Notepad++" -Target $notepadPath -OutputDirectory "$env:USERPROFILE\Desktop" -HotKey $notepad_keys

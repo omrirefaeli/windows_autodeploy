@@ -148,7 +148,7 @@ if (!$terminal_path) {
 }
 if ($terminal_path) {
     Write-Host -ForegroundColor Green -BackgroundColor Black "Elevated Terminal Shortcut: Found executable, creating a shortcut..."
-    CreateShortcut -name "Terminal Admin" -Target $terminal_path  -OutputDirectory "C:\Users\omrirefaeli\Desktop" -Elevated True -HotKey "CTRL+ALT+T"
+    CreateShortcut -name "Terminal Admin" -Target $terminal_path  -OutputDirectory "$env:USERPROFILE\Desktop" -Elevated True -HotKey "CTRL+ALT+T"
 }
 else {
     Write-Host -ForegroundColor Red -BackgroundColor Black "Elevated Terminal Shortcut: Could find Terminal executable, and therefore could not create a shortcut for the Terminal"

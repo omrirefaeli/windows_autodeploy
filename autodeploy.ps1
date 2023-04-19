@@ -94,7 +94,6 @@ Function CreateShortcut {
 
 #################################### Chocolately ##############################################
 Write-Host -ForegroundColor black -BackgroundColor Cyan "installing chocolately & packages"
-[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 $install_array = @("7zip.install",  "notepadplusplus", "googlechrome", "everything", "adobereader", "hxd", "git")
 
@@ -106,6 +105,8 @@ do {
 while ($personal_bool -notin @("y", "n"))
 
 if ($personal_bool -eq "y") { $install_array += $personal_additions } 
+
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 $install_string = $install_array -join " "
 Write-Host -ForegroundColor black -BackgroundColor Cyan "Installing the packages: `n$($install_string)"

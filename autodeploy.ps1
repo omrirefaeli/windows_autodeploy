@@ -96,7 +96,7 @@ Function CreateShortcut {
 Write-Host -ForegroundColor black -BackgroundColor Cyan "installing chocolately & packages"
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-$install_array = @("7zip.install",  "notepadplusplus", "googlechrome", "everything", "adobereader", "git")
+$install_array = @("7zip.install",  "notepadplusplus", "googlechrome", "everything", "adobereader", "hxd", "git")
 
 $personal_additions = @("evernote")
 Write-Host -ForegroundColor black -BackgroundColor Cyan "Would you like to include the personal software additions? The packages are:`n$($personal_additions)"

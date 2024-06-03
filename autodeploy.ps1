@@ -95,9 +95,9 @@ Function CreateShortcut {
 #################################### Chocolately ##############################################
 Write-Host -ForegroundColor black -BackgroundColor Cyan "installing chocolately & packages"
 
-$install_array = @("7zip.install",  "notepadplusplus", "googlechrome", "everything", "adobereader", "hxd", "git")
+$install_array = @("7zip.install",  "notepadplusplus", "googlechrome", "everything", "010editor", "git")
 
-$personal_additions = @("evernote")
+$personal_additions = @("adobereader","obsidian")
 Write-Host -ForegroundColor black -BackgroundColor Cyan "Would you like to include the personal software additions? The packages are:`n$($personal_additions)"
 do {
     $personal_bool = Read-Host "Please enter [y/n]"

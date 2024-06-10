@@ -106,6 +106,13 @@ while ($personal_bool -notin @("y", "n"))
 
 if ($personal_bool -eq "y") { $install_array += $personal_additions } 
 
+
+Write-Host -ForegroundColor black -BackgroundColor Cyan "Would you like to enable WSL?"
+do {
+    $wsl = Read-Host "Please enter [y/n]"
+}
+while ($wsl -notin @("y", "n"))
+
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 $install_string = $install_array -join " "
@@ -172,5 +179,8 @@ else {
 
 }
 #################################### Enable WSL ##############################################
+if ($wsl -eq "y") 
+{  
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux 
+}
 
